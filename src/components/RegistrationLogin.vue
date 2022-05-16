@@ -58,6 +58,15 @@ export default {
         phone: null,
         gender: null,
         password: null,
+        background: 'https://cdn.wallpapersafari.com/19/16/i0afrx.jpg',
+        avatar: 'https://www.pngitem.com/pimgs/m/575-5759580_anonymous-avatar-image-png-transparent-png.png',
+        friends: ['oljasalidarov@gmail.com'],
+        profileInfo: {
+          aboutMe: '',
+          working: '',
+          city: ''
+        },
+        photos: []
       },
       login: {
         email: null,
