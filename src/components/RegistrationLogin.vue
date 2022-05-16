@@ -12,15 +12,15 @@
         </div>
         <div class="w-1/3 bg-white rounded-xl p-5">
           <div v-if="setForm === 1">
-            <input class="w-full p-3 rounded-lg border my-2" placeholder="Электронный адрес" type="text">
-            <input class="w-full p-3 rounded-lg border my-2" placeholder="Пароль" type="text">
-            <button class="bg-main p-3 text-xl font-medium mt-2 text-center w-full rounded-lg text-white">Вход</button>
+            <input v-model="login.email" class="w-full p-3 rounded-lg border my-2" placeholder="Электронный адрес" type="email">
+            <input v-model="login.password" class="w-full p-3 rounded-lg border my-2" placeholder="Пароль" type="text">
+            <button @click="loginUser()" class="bg-main p-3 text-xl font-medium mt-2 text-center w-full rounded-lg text-white">Вход</button>
           </div>
           <div v-if="setForm === 2">
-            <input class="w-full p-3 rounded-lg border my-2" placeholder="Имя" type="text">
-            <input class="w-full p-3 rounded-lg border my-2" placeholder="Фамилия" type="text">
-            <input class="w-full p-3 rounded-lg border my-2" placeholder="Email" type="text">
-            <input class="w-full p-3 rounded-lg border my-2" placeholder="Телефон" type="text">
+            <input v-model="registration.name" class="w-full p-3 rounded-lg border my-2" placeholder="Имя" type="text">
+            <input v-model="registration.surname" class="w-full p-3 rounded-lg border my-2" placeholder="Фамилия" type="text">
+            <input v-model="registration.email" class="w-full p-3 rounded-lg border my-2" placeholder="Email" type="text">
+            <input v-model="registration.phone" class="w-full p-3 rounded-lg border my-2" placeholder="Телефон" type="text">
             <div class="flex items-center justify-between">
               <div>
                 <label class="mr-2" for="">Мужчина</label>
@@ -31,8 +31,8 @@
                 <input v-model="registration.gender" type="radio" name="gender" value="female">
               </div>
             </div>
-            <input class="w-full p-3 rounded-lg border my-2" placeholder="Пароль" type="text">
-            <button class="bg-main p-3 text-xl font-medium mt-2 text-center w-full rounded-lg text-white">Регистрация</button>
+            <input v-model="registration.password" class="w-full p-3 rounded-lg border my-2" placeholder="Пароль" type="text">
+            <button @click="regiterUser()" class="bg-main p-3 text-xl font-medium mt-2 text-center w-full rounded-lg text-white">Регистрация</button>
           </div>
           <div class="w-full border-b my-2"></div>
           <button @click="setForm = 2" v-if="setForm === 1" class="bg-green-500 p-3 text-xl font-medium text-center w-full rounded-lg text-white">Регистрация</button>
@@ -44,11 +44,13 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: "RegistrationLogin",
   data() {
     return {
       setForm: 1,
+      users: null,
       registration: {
         name: null,
         surname: null,
@@ -56,7 +58,32 @@ export default {
         phone: null,
         gender: null,
         password: null,
+      },
+      login: {
+        email: null,
+        password: null
       }
+    }
+  },
+  async mounted() {
+    let res = await axios.get('https://6282500ded9edf7bd882691b.mockapi.io/users')
+    this.users = res.data
+    // localStorage.clear()
+  },
+  methods: {
+    async regiterUser() {
+      await axios.post('https://6282500ded9edf7bd882691b.mockapi.io/users', this.registration)
+      this.$router.go()
+    },
+    loginUser() {
+      this.users.forEach(element => {
+        if(element.email == this.login.email && element.password == this.login.password) {
+          localStorage.setItem('loggedUser', element.email)
+          this.$router.go()
+        } else {
+          console.log('...')
+        }
+      });
     }
   }
 };
