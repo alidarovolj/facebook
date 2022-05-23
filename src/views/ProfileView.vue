@@ -10,7 +10,10 @@
             <img class="h-20 w-20 object-cover mr-4 rounded-full" :src="activeUser[0].avatar" alt="">
             <div>
               <p class="text-3xl font-bold">{{ activeUser[0].name + " " + activeUser[0].surname }}</p>
-              <p class="font-bold">Друзья: {{ activeUser[0].friends.length }}</p>
+              <p class="font-bold mb-3">Друзья: {{ activeUser[0].friends.length }}</p>
+              <div class="flex items-center justify-start">
+                <img class="w-7 h-7 rounded-full object-cover" v-for="ava of userFriends" :key="ava.id" :src="ava.avatar" alt="">
+              </div>
             </div>
           </div>
           <p class="font-bold bg-slate-200 p-2 rounded-lg hover:cursor-pointer">Редактировать профиль</p>
@@ -96,6 +99,9 @@ export default {
         return this.posts.filter((e) => e.user_login === this.currentUser);
       }
     },
+    userFriends() {
+      return this.users.filter((i) => this.activeUser[0].friends.includes(i.email))
+    }
   },
   async created() {
     let res = await axios.get(
