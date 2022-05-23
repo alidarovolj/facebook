@@ -38,7 +38,9 @@
           <h2 class="font-bold text-xl mb-5">Публикации</h2>
           <div class="flex bg-slate-100 p-2 rounded-lg mb-4">
             <img class="w-10 h-10 my-auto mr-5 rounded-full" :src="activeUser[0].avatar" alt="">
-            <input v-model="newPost.text" class="w-full p-3 rounded-full" type="text" placeholder="Что у вас нового?">
+            <input v-model="newPost.text" class="w-full p-3 rounded-full mx-1 border" type="text" placeholder="Что у вас нового?">
+            <input v-model="newPost.image" class="w-full p-3 rounded-full mx-1 border" type="text" placeholder="Загрузите картинку">
+            <input v-model="newPost.video" class="w-full p-3 rounded-full mx-1 border" type="text" placeholder="Загрузите видео">
             <button @click="sendPost()" class="bg-main px-3 ml-3 text-white font-bold rounded-lg">Отправить</button>
           </div>
           <div class="flex flex-wrap flex-col-reverse">
@@ -51,7 +53,8 @@
                 </div>
               </div>
               <div>
-                <p>{{ post.text }}</p>
+                <p class="mb-4">{{ post.text }}</p>
+                <img class="w-full" :src="post.image" alt="">
                 <div class="my-2 flex items-center">
                   <p class="block my-auto text-whitet bg-main mr-2 text-center text-white rounded-full w-7 h-7">
                     <i class="fa-regular fa-thumbs-up"></i></p> <span class="font-bold">{{ post.likes.length }}</span></div>
@@ -80,6 +83,9 @@ export default {
         user_login: localStorage.getItem("loggedUser"),
         text: null,
         likes: [],
+        comments: [],
+        image: null,
+        video: null
       },
       currentUser: localStorage.getItem("loggedUser"),
     };

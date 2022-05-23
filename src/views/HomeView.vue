@@ -1,10 +1,22 @@
 <template>
   <div class="home bg-slate-100 py-10">
     <div class="container mx-auto">
-      <div class="bg-white p-3 mb-4 rounded-lg" v-for="(post, index) of friendsPost" :key="post.id">
-        <p class="font-semibold">{{ post.user_login }}</p>
-        <p>{{ post.createdAt }}</p>
-        <p>{{ post.text }}</p>
+      <div
+        class="bg-white p-3 mb-4 rounded-lg"
+        v-for="(post, index) of friendsPost"
+        :key="post.id"
+      >
+        <div class="flex items-center">
+          <img class="w-12 h-12 rounded-full mr-4 object-cover" :src="post.info.avatar" alt="">
+          <div>
+            <p class="font-semibold">
+              {{ post.info.name + " " + post.info.surname }}
+            </p>
+            <p>{{ post.createdAt }}</p>
+          </div>
+        </div>
+        <p class="my-2">{{ post.text }}</p>
+        <img class="w-full" :src="post.image" alt="">
         <p @click="setLike(index)">{{ post.likes.length }}</p>
       </div>
     </div>
@@ -43,13 +55,20 @@ export default {
       );
     },
     friendsPost() {
-      if(this.posts != null) {
-        let a = this.posts.filter((post) => this.activeUser[0].friends.includes(post.user_login))
-        return a
-      } else {
-        return console.log('sss')
+      if (this.posts) {
+        let arr = this.posts.filter((e) =>
+          this.activeUser[0].friends.includes(e.user_login)
+        );
+        let arrWithInfo = arr.map((post) => {
+          post.info = this.userFriends.find(
+            (user) => post.user_login == user.email
+          );
+          return post;
+        });
+        return arrWithInfo;
       }
-    }
+      return [];
+    },
   },
   async created() {
     let res = await axios.get(
