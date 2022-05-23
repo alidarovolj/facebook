@@ -153,7 +153,7 @@ export default {
     },
     async addToFriends(email) {
       this.activeUser[0].friends.push(email);
-      axios.put(
+      await axios.put(
         "https://6282500ded9edf7bd882691b.mockapi.io/users/" +
           this.activeUser[0].id,
         this.activeUser[0]
