@@ -1,23 +1,44 @@
 <template>
   <div class="home bg-slate-100 py-10">
     <div class="container mx-auto">
-      <div
-        class="bg-white p-3 mb-4 rounded-lg"
-        v-for="(post, index) of friendsPost"
-        :key="post.id"
-      >
-        <div class="flex items-center">
-          <img class="w-12 h-12 rounded-full mr-4 object-cover" :src="post.info.avatar" alt="">
-          <div>
-            <p class="font-semibold">
-              {{ post.info.name + " " + post.info.surname }}
-            </p>
-            <p>{{ post.createdAt }}</p>
+      <div class="w-1/2 mx-auto">
+        <div
+          class="bg-white p-3 mb-4 rounded-lg"
+          v-for="(post, index) of friendsPost"
+          :key="post.id"
+        >
+          <div class="flex items-center">
+            <img
+              class="w-12 h-12 rounded-full mr-4 object-cover"
+              :src="post.info.avatar"
+              alt=""
+            />
+            <div>
+              <p class="font-semibold">
+                {{ post.info.name + " " + post.info.surname }}
+              </p>
+              <p>{{ post.createdAt }}</p>
+            </div>
           </div>
+          <p class="my-2">{{ post.text }}</p>
+          <img class="w-full" :src="post.image" alt="" />
+          <p :class="{ 'text-blue-500' : post.likes.includes(currentUser) }" class="hover:cursor-pointer" @click="setLike(index)"><i class="fa-regular fa-heart mr-2"></i>{{ post.likes.length }}</p>
         </div>
-        <p class="my-2">{{ post.text }}</p>
-        <img class="w-full" :src="post.image" alt="">
-        <p @click="setLike(index)">{{ post.likes.length }}</p>
+      </div>
+    </div>
+    <div class="fixed right-5 top-20">
+      <div class="flex items-center justify-between hover:cursor-pointer" v-for="user of usersList" :key="user.id">
+        <div class="flex items-center my-2">
+          <img
+            class="w-9 h-9 object-cover rounded-full mr-2"
+            :src="user.avatar"
+            alt=""
+          />
+          <p class="text-sm font-semibold">
+            {{ user.name + " " + user.surname }}
+          </p>
+        </div>
+        <p @click="addToFriends(user.email)" class="ml-2"><i class="fa-solid fa-plus"></i></p>
       </div>
     </div>
   </div>
@@ -32,6 +53,14 @@ export default {
       users: null,
       posts: null,
       currentUser: localStorage.getItem("loggedUser"),
+      message: {
+        id: 1,
+        first: {},
+        second: {},
+        text: '',
+        date: '',
+        status: false
+      }
     };
   },
   computed: {
@@ -69,6 +98,9 @@ export default {
       }
       return [];
     },
+    usersList() {
+      return this.users.filter((i) => !this.activeUser[0].friends.includes(i.email))
+    }
   },
   async created() {
     let res = await axios.get(
@@ -100,6 +132,11 @@ export default {
         );
       }
     },
+    async addToFriends(email) {
+      this.activeUser[0].friends.push(email)
+      axios.put("https://6282500ded9edf7bd882691b.mockapi.io/users/" + this.activeUser[0].id, this.activeUser[0])
+      this.$router.go()
+    }
   },
 };
 </script>

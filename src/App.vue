@@ -2,6 +2,28 @@
   <div id="app">
     <regLog v-if="currentUser == null" />
     <div v-else>
+      <div class="fixed border-r py-5 h-full bg-white w-14 left-0 top-0">
+        <i
+          @click="$router.push({ name: 'profile' })"
+          class="
+            fa-solid fa-user
+            block
+            text-center text-2xl
+            my-2
+            hover:cursor-pointer hover:text-main
+          "
+        ></i>
+        <i
+          @click="$router.push({ name: 'home' })"
+          class="
+            fa-solid fa-house
+            block
+            text-center text-2xl
+            my-2
+            hover:cursor-pointer hover:text-main
+          "
+        ></i>
+      </div>
       <p
         @click="logout()"
         class="
