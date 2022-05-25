@@ -1,10 +1,21 @@
 <template>
-  <div class="my-10">
+  <div class="my-10 h-full">
     <div class="container mx-auto">
       <p class="font-semibold mb-7">
         {{ chatUser[0].name + " " + chatUser[0].surname }}
       </p>
-      <div class="bg-slate-100 p-5 rounded-lg">
+
+      <div class="bg-slate-100 h-full p-5 rounded-lg">
+        <div v-for="message of currentChat" :key="message.id">
+          <div class="flex flex-col justify-end items-end my-3" v-for="msg of message.text" :key="msg.id">
+            <p class="font-semibold">
+              {{ msg.from }}
+            </p>
+            <p>
+              {{ msg.msg }}
+            </p>
+          </div>
+        </div>
         <div class="flex">
           <input
             v-model="message.text[0].msg"
@@ -102,10 +113,7 @@ export default {
       if (this.messages != null) {
         return this.messages.filter(
           (e) =>
-            e.personOne == this.currentUser ||
-            (e.personOne == this.chatUser[0].email &&
-              e.personTwo == this.chatUser[0].email) ||
-            e.personTwo == this.currentUser
+            (e.personOne == this.currentUser || e.personOne == this.chatUser[0].email) && (e.personTwo == this.chatUser[0].email || e.personTwo == this.currentUser)
         );
       } else {
         return console.log("no messages");
