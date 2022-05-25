@@ -7,12 +7,15 @@
       <div class="bg-slate-100 p-5 rounded-lg">
         <div class="flex">
           <input
-            v-model="message.text.msg"
+            v-model="message.text[0].msg"
             type="text"
             placeholder="Напишите сообщение"
             class="w-full p-3 rounded-full mx-1 border"
           />
-          <button class="bg-main px-3 ml-3 text-white font-bold rounded-lg">
+          <button
+            @click="sendMessage()"
+            class="bg-main px-3 ml-3 text-white font-bold rounded-lg"
+          >
             Отправить
           </button>
         </div>
@@ -29,6 +32,7 @@ export default {
     return {
       users: null,
       posts: null,
+      messages: null,
       currentUser: localStorage.getItem("loggedUser"),
       curID: this.$route.params.id,
       message: {
@@ -37,9 +41,9 @@ export default {
         text: [
           {
             from: null,
-            msg: null
-          }
-        ]
+            msg: null,
+          },
+        ],
       },
     };
   },
@@ -94,6 +98,19 @@ export default {
         (i) => !this.activeUser[0].friends.includes(i.email)
       );
     },
+    currentChat() {
+      if (this.messages != null) {
+        return this.messages.filter(
+          (e) =>
+            e.personOne == this.currentUser ||
+            (e.personOne == this.chatUser[0].email &&
+              e.personTwo == this.chatUser[0].email) ||
+            e.personTwo == this.currentUser
+        );
+      } else {
+        return console.log("no messages");
+      }
+    },
   },
   async created() {
     let res = await axios.get(
@@ -106,9 +123,14 @@ export default {
     );
     this.posts = posts.data;
 
-    this.message.text.from = this.activeUser[0].email
-    this.message.personOne = this.currentUser
-    this.message.personTwo = this.chatUser[0].email
+    let messages = await axios.get(
+      "https://6282500ded9edf7bd882691b.mockapi.io/messages"
+    );
+    this.messages = messages.data;
+
+    this.message.text[0].from = this.activeUser[0].email;
+    this.message.personOne = this.currentUser;
+    this.message.personTwo = this.chatUser[0].email;
   },
   methods: {
     async setLike(id) {
@@ -126,6 +148,22 @@ export default {
         await axios.put(
           "https://6282500ded9edf7bd882691b.mockapi.io/posts/" + postID,
           this.friendsPost[id]
+        );
+      }
+    },
+    async sendMessage() {
+      if (this.currentChat.length <= 0) {
+        await axios.post(
+          "https://6282500ded9edf7bd882691b.mockapi.io/messages",
+          this.message
+        );
+        console.log("отправлено");
+      } else {
+        this.currentChat[0].text.push(this.message.text[0]);
+        await axios.put(
+          "https://6282500ded9edf7bd882691b.mockapi.io/messages/" +
+            this.currentChat[0].id,
+          this.currentChat[0]
         );
       }
     },
