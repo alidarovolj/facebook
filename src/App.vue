@@ -23,6 +23,16 @@
             hover:cursor-pointer hover:text-main
           "
         ></i>
+        <i
+          @click="$router.push({ name: 'messages' })"
+          class="
+            fa-solid fa-message
+            block
+            text-center text-2xl
+            my-2
+            hover:cursor-pointer hover:text-main
+          "
+        ></i>
       </div>
       <p
         @click="logout()"
