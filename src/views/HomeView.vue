@@ -2,7 +2,7 @@
   <div class="home bg-white py-10">
     <div class="container mx-auto">
       <div class="w-1/2 mx-auto">
-        <postsComp v-bind:setPosts="'friendsPost'"/>
+        <postsComp v-bind:setPosts="'friendsPost'" />
       </div>
     </div>
     <div class="fixed right-5 top-20">
