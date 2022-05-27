@@ -115,58 +115,7 @@
               Отправить
             </button>
           </div>
-          <div class="flex flex-wrap flex-col-reverse">
-            <div
-              class="bg-slate-100 w-full rounded-lg mb-4"
-              v-for="(post, index) of userPosts"
-              :key="post.id"
-            >
-              <div class="flex items-start mb-3 p-3">
-                <img
-                  class="w-14 h-auto mr-5 rounded-full"
-                  :src="activeUser[0].avatar"
-                  alt=""
-                />
-                <div>
-                  <p class="text-xl font-bold">
-                    {{ activeUser[0].name + " " + activeUser[0].surname }}
-                  </p>
-                  <p>{{ post.createdAt }}</p>
-                </div>
-              </div>
-              <div>
-                <p class="mb-4 px-3">{{ post.text }}</p>
-                <img class="w-full" :src="post.image" alt="" />
-              </div>
-              <div class="p-3 flex items-center">
-                <div class="my-2 flex items-center mr-2">
-                  <p
-                    class="
-                      block
-                      my-auto
-                      text-whitet
-                      bg-main
-                      mr-2
-                      text-center text-white
-                      rounded-full
-                      w-7
-                      h-7
-                    "
-                  >
-                    <i class="fa-regular fa-thumbs-up"></i>
-                  </p>
-                  <span class="font-bold">{{ post.likes.length }}</span>
-                </div>
-                <p
-                  @click="setLike(index)"
-                  :class="{ 'text-blue-500': post.likes.includes(currentUser) }"
-                  class="text-base font-bold hover:cursor-pointer"
-                >
-                  Нравится
-                </p>
-              </div>
-            </div>
-          </div>
+          <postsComp v-bind:setPosts="'userPosts'" />
         </div>
       </div>
     </div>
@@ -174,13 +123,13 @@
 </template>
 
 <script>
+import postsComp from "../components/PostsComp.vue";
+import { mapActions, mapGetters } from "vuex";
 import axios from "axios";
 export default {
   name: "ProfileView",
   data() {
     return {
-      users: null,
-      posts: null,
       newPost: {
         user_login: localStorage.getItem("loggedUser"),
         text: null,
@@ -192,58 +141,21 @@ export default {
       currentUser: localStorage.getItem("loggedUser"),
     };
   },
+  components: {
+    postsComp,
+  },
   computed: {
-    activeUser() {
-      if (this.users === null) {
-        return console.log("...");
-      } else {
-        return this.users.filter((e) => e.email === this.currentUser);
-      }
-    },
-    userPosts() {
-      if (this.posts === null) {
-        return console.log("...");
-      } else {
-        return this.posts.filter((e) => e.user_login === this.currentUser);
-      }
-    },
-    userFriends() {
-      return this.users.filter((i) =>
-        this.activeUser[0].friends.includes(i.email)
-      );
-    },
+    ...mapGetters(["sendUsers", "activeUser", "userFriends"]),
   },
   async created() {
-    let res = await axios.get(
-      "https://6282500ded9edf7bd882691b.mockapi.io/users"
-    );
-    this.users = res.data;
-
+    this.getUsers();
     let posts = await axios.get(
       "https://6282500ded9edf7bd882691b.mockapi.io/posts"
     );
     this.posts = posts.data;
-    // localStorage.clear()
   },
   methods: {
-    async setLike(id) {
-      let postID = this.userPosts[id].id;
-      if (this.userPosts[id].likes.includes(this.currentUser)) {
-        let myIndex = this.userPosts[id].likes.indexOf(this.currentUser);
-        this.userPosts[id].likes.splice(myIndex, 1);
-        await axios.put(
-          "https://6282500ded9edf7bd882691b.mockapi.io/posts/" + postID,
-          this.userPosts[id]
-        );
-      } else {
-        console.log(postID);
-        this.userPosts[id].likes.push(this.currentUser);
-        await axios.put(
-          "https://6282500ded9edf7bd882691b.mockapi.io/posts/" + postID,
-          this.userPosts[id]
-        );
-      }
-    },
+    ...mapActions(["getUsers"]),
     async sendPost() {
       await axios.post(
         "https://6282500ded9edf7bd882691b.mockapi.io/posts",
