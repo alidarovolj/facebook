@@ -1,7 +1,7 @@
 <template>
-  <div class="my-10">
+  <div class="my-10 pl-16 pr-2">
     <div class="container mx-auto">
-      <div class="w-1/2 mx-auto bg-slate-100 p-5 rounded-lg">
+      <div class="w-full lg:w-1/2 mx-auto bg-slate-100 p-5 rounded-lg">
         <h1 class="text-xl font-semibold">Сообщения</h1>
         <div
           class="my-4 flex items-center justify-between"
@@ -18,9 +18,9 @@
           </div>
           <p
             @click="$router.push({ name: 'chat', params: { id: user.id } })"
-            class="text-sm font-semibold text-main hover:cursor-pointer"
+            class="text-sm font-semibold text-main hover:cursor-pointer flex items-center"
           >
-            Перейти в чат <i class="fa-solid fa-arrow-right"></i>
+            <span class="hidden lg:flex">Перейти в чат</span> <i class="fa-solid fa-arrow-right flex"></i>
           </p>
         </div>
       </div>

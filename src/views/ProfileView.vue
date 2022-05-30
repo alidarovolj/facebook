@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="w-full pl-14">
     <div class="bg-slate-100">
       <div class="container mx-auto">
         <div class="w-full h-80 rounded-xl">
@@ -9,8 +9,8 @@
             alt=""
           />
         </div>
-        <div class="flex items-center justify-between py-3">
-          <div class="flex items-center">
+        <div class="block lg:flex pl-4 items-center justify-between py-3">
+          <div class="block lg:flex items-center">
             <img
               class="h-20 w-20 object-cover mr-4 rounded-full"
               :src="activeUser[0].avatar"
@@ -34,15 +34,15 @@
               </div>
             </div>
           </div>
-          <p class="font-bold bg-slate-200 p-2 rounded-lg hover:cursor-pointer">
+          <p class="font-bold bg-slate-200 p-2 rounded-lg w-max lg:w-auto mx-auto lg:mx-0 mt-4 hover:cursor-pointer">
             Редактировать профиль
           </p>
         </div>
       </div>
     </div>
-    <div class="container mx-auto mt-5">
-      <div class="flex items-start justify-between">
-        <div class="w-1/3 bg-slate-100 p-4 rounded-lg">
+    <div class="container mx-auto mt-5 pl-4 lg:pl-0">
+      <div class="block lg:flex items-start justify-between">
+        <div class="w-full lg:w-1/3 bg-slate-100 p-4 rounded-lg">
           <h2 class="text-xl font-bold mb-4">Краткая информация</h2>
           <p>
             Работа:
@@ -82,7 +82,7 @@
             >
           </p>
         </div>
-        <div class="w-2/3 pl-4">
+        <div class="w-full lg:w-2/3">
           <h2 class="font-bold text-xl mb-5">Публикации</h2>
           <div class="flex bg-slate-100 p-2 rounded-lg mb-4">
             <img

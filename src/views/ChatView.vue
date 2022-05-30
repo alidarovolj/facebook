@@ -1,7 +1,7 @@
 <template>
-  <div class="my-10 h-full">
+  <div class="my-10 h-full pl-16 lg:pl-0 pr-2 lg:pr-0">
     <div class="container mx-auto">
-      <div class="w-1/2 mx-auto">
+      <div class="w-full lg:w-1/2 mx-auto">
         <p class="font-semibold mb-7">
           {{ chatUser[0].name + " " + chatUser[0].surname }}
         </p>
