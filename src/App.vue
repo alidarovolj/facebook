@@ -34,15 +34,32 @@
           "
         ></i>
         <i
-          @click="$router.push({ name: 'home' })"
+          @click="$router.push({ name: 'notifications' })"
           class="
             fa-solid fa-bell
             block
             text-center text-2xl
             my-2
             hover:cursor-pointer hover:text-main
+            relative
           "
-        ></i>
+          ><p
+          v-if="setNotify.length > 0"
+            class="
+              absolute
+              right-0
+              top-0
+              text-xs
+              w-5
+              h-5
+              bg-red-500
+              rounded-full
+              text-white
+            "
+          >
+            {{ setNotify.length }}
+          </p></i
+        >
       </div>
       <div class="absolute top-5 right-5 flex items-center flex-row-reverse">
         <p
@@ -75,10 +92,34 @@
             class="p-2 rounded-lg w-full border"
             placeholder="Поиск..."
           />
-          <div class="w-full absolute top-full left-0 bg-white p-2 rounded-lg anotherFocus">
-            <div class="my-1 flex items-center" v-for="user of filteredUsers" :key="user.id">
-              <img class="w-8 h-8 rounded-full object-cover mr-2" :src="user.avatar" alt="">
-              <p class="font-semibold text-sm">{{ user.name + " " + user.surname }}</p>
+          <div
+            class="
+              w-full
+              absolute
+              top-full
+              left-0
+              bg-white
+              p-2
+              rounded-lg
+              anotherFocus
+            "
+          >
+            <div
+              class="my-1 flex items-center"
+              v-for="user of filteredUsers"
+              :key="user.id"
+            >
+              <img
+                class="w-8 h-8 rounded-full object-cover mr-2"
+                :src="user.avatar"
+                alt=""
+              />
+              <p
+                class="font-semibold text-sm"
+                @click="$router.push({ name: 'single', params: { id: user } })"
+              >
+                {{ user.name + " " + user.surname }}
+              </p>
             </div>
           </div>
         </div>
@@ -104,9 +145,9 @@ export default {
       filteredUsers: [],
     };
   },
-  computed: { ...mapGetters(["sendUsers"]) },
+  computed: { ...mapGetters(["sendUsers", "setNotify"]) },
   methods: {
-    ...mapActions(["getUsers"]),
+    ...mapActions(["getUsers", "getNotifications"]),
     typeSearch() {
       let a = this.sendUsers.filter((e) =>
         e.name.toLowerCase().includes(this.search.toLowerCase())
@@ -127,6 +168,7 @@ export default {
   },
   async created() {
     this.getUsers();
+    this.getNotifications();
   },
 };
 </script>

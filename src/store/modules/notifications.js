@@ -7,7 +7,7 @@ export default {
       );
       let newNotifications = res.data;
       commit("updateNotifications", newNotifications);
-    },
+    }
   },
   mutations: {
     updateNotifications(state, newNotifications) {
@@ -25,6 +25,13 @@ export default {
     filterNotifications(state) {
       if(state.notifications != null) {
         return state.notifications.filter((e) => e.user_login == state.currentUser)
+      } else {
+        return console.log('...')
+      }
+    },
+    setNotify(state) {
+      if(state.notifications != null) {
+        return state.notifications.filter((e) => e.user_login == state.currentUser && e.status != 1)
       } else {
         return console.log('...')
       }
