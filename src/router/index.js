@@ -5,6 +5,7 @@ import ProfileView from "../views/ProfileView";
 import SingleProfile from "../views/SingleProfile";
 import MessagesView from "../views/MessagesView";
 import ChatView from "../views/ChatView";
+import SetNotify from "../views/SetNotify";
 
 Vue.use(VueRouter);
 
@@ -33,6 +34,11 @@ const routes = [
     path: "/messages/:id",
     name: "chat",
     component: ChatView,
+  },
+  {
+    path: "/notifications",
+    name: "notifications",
+    component: SetNotify,
   },
 ];
 
